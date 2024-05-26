@@ -25,7 +25,7 @@ Este é meu primeiro Bot para Discord, Ele é feito em python e é bem basico, m
 
 **#Instalação**
 
-Caso use o **Replit.com**, Apenas vá em 
+Caso use o **https://replit.com/**, Apenas vá em 
 
 **https://discord.com/developers/docs/intro**
 
@@ -47,8 +47,8 @@ Caso use o **Replit.com**, Apenas vá em
 
 5.3- Copie o TOKEN e substitua em "try: token = os.getenv('DISCORD_BOT_TOKEN')"
 
-6- Cole o codigo no **Replit.com**
+6- Cole o codigo no **https://replit.com/**
 
 7- Entre com seu Bot no Servidor Desejado
 
-8. De Run no Bot no **Replit.com**
+8. De Run no Bot no **https://replit.com/**
