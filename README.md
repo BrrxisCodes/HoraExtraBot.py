@@ -1,6 +1,6 @@
 **#Discord Bot**
 
-Este é meu primeiro Bot para Discord, Ele é feito em python e é bem basico, mas da para se divertir modificando ele de acordo com o que você precisar!
+Este é meu primeiro Bot para Discord, Ele é feito em python e é bem basico, mas da para se divertir modificando ele de acordo com o que você precisar!.
 
 **#Funcionalidades**
 
