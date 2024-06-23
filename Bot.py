@@ -4,9 +4,6 @@ import time
 import random
 import requests
 from deep_translator import GoogleTranslator
-from dotenv import load_dotenv
-
-load_dotenv()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -60,6 +57,8 @@ async def on_message(message):
             ("he!br-en", "O Bot Ira Traduzir de Português para Ingles"),
             ("he!en-br", "O Bot Ira Traduzir de Ingles para Português"),
             ("he!ship", "Calcula a química entre duas pessoas"),
+            ("he!gitcode", "Te Envia o Link do Github do Code do Bot"),
+            ("he!dolrl", "O Bot Vai Cotar o USD em BRL e o BRL em USD em Tempo Real"),
         ]
 
         embeds = []
@@ -122,12 +121,16 @@ async def on_message(message):
         try:
             response = requests.get(url)
             data = response.json()
-            btc_value = data['bitcoin']['brl']
-            eth_value = data['ethereum']['brl']
-            embed = discord.Embed(title="Cotação de Criptomoedas em Tempo Real", color=0x00ff00)
-            embed.add_field(name="BTC", value=f"R${btc_value}", inline=False)
-            embed.add_field(name="ETH", value=f"R${eth_value}", inline=False)
-            await message.channel.send(embed=embed)
+            print(data)  # Logging the data for debugging
+            if 'bitcoin' in data and 'ethereum' in data:
+                btc_value = data['bitcoin']['brl']
+                eth_value = data['ethereum']['brl']
+                embed = discord.Embed(title="Cotação de Criptomoedas em Tempo Real", color=0x00ff00)
+                embed.add_field(name="BTC", value=f"R${btc_value}", inline=False)
+                embed.add_field(name="ETH", value=f"R${eth_value}", inline=False)
+                await message.channel.send(embed=embed)
+            else:
+                await message.channel.send("Erro ao obter os dados da API.")
         except Exception as e:
             await message.channel.send(f"Erro ao obter a cotação das criptomoedas: {e}")
 
@@ -161,8 +164,31 @@ async def on_message(message):
         embed = discord.Embed(title="Ship Calculator", description=f"{emoji} {pair.title()} {percentage}% de química {emoji}", color=0xff69b4)
         await message.channel.send(embed=embed)
 
+    elif message.content == 'he!gitcode':
+        embed = discord.Embed(title="GitHub Repository", description="Clique no link abaixo para acessar o código fonte:", color=0x00ff00)
+        embed.add_field(name="GitHub", value="[HoraExtraBot.py](https://github.com/BrrxisCodes/HoraExtraBot.py)", inline=False)
+        await message.channel.send(embed=embed)
+
+    elif message.content == 'he!dolrl':
+        url = 'https://api.coingecko.com/api/v3/simple/price?ids=usd&vs_currencies=brl'
+        try:
+            response = requests.get(url)
+            data = response.json()
+            print(data)  # Logging the data for debugging
+            if 'usd' in data and 'brl' in data:
+                usd_to_brl = data['usd']['brl']
+                brl_to_usd = 1 / usd_to_brl
+                embed = discord.Embed(title="Cotação do Dólar em Tempo Real", color=0x00ff00)
+                embed.add_field(name="USD para BRL", value=f"R${usd_to_brl:.2f}", inline=False)
+                embed.add_field(name="BRL para USD", value=f"${brl_to_usd:.2f}", inline=False)
+                await message.channel.send(embed=embed)
+            else:
+                await message.channel.send("Erro ao obter os dados da API.")
+        except Exception as e:
+            await message.channel.send(f"Erro ao obter a cotação do dólar: {e}")
+
 try:
-    token = os.getenv('DISCORD_BOT_TOKEN')
+    token = "."
     client.run(token)
 except discord.HTTPException as e:
     if e.status == 429:
@@ -172,3 +198,4 @@ except discord.HTTPException as e:
         raise e
 except Exception as e:
     print(f"An error occurred: {e}")
+
